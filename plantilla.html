@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Autofactura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            width: 150px;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .datos {
+            margin-top: 30px;
+        }
+        .datos div {
+            margin-bottom: 10px;
+        }
+        .tabla {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        .tabla th, .tabla td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .totales {
+            margin-top: 20px;
+            float: right;
+            width: 300px;
+        }
+        .totales div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        footer {
+            margin-top: 100px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo.png" alt="Logo EVenergia" class="logo">
+    <div>
+        <strong>EVenergia Consulting SL</strong><br>
+        CIF: B13803390<br>
+        Avenida Diagonal, 532, P. 2<br>
+        08006 Barcelona, España<br>
+        info@evenergia.com
+    </div>
+</header>
+
+<h1>Autofactura Nº {{ numero_factura }}</h1>
+
+<div class="datos">
+    <div><strong>Proveedor:</strong> {{ proveedor_nombre }}</div>
+    <div><strong>CIF:</strong> {{ proveedor_cif }}</div>
+    <div><strong>Dirección:</strong> {{ proveedor_direccion }}</div>
+    <div><strong>Fecha:</strong> {{ fecha }}</div>
+</div>
+
+<table class="tabla">
+    <tr>
+        <th>Descripción</th>
+        <th>Unidades</th>
+        <th>Precio Unitario</th>
+        <th>IVA (%)</th>
+        <th>Total</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.descripcion }}</td>
+        <td>{{ item.unidades }}</td>
+        <td>{{ item.precio_unitario }}</td>
+        <td>{{ item.iva }}</td>
+        <td>{{ item.total }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="totales">
+    <div><strong>Subtotal:</strong> {{ subtotal }} €</div>
+    <div><strong>IVA:</strong> {{ total_iva }} €</div>
+    <div><strong>Total:</strong> {{ total }} €</div>
+</div>
+
+<footer>
+    IBAN: {{ iban }}<br>
+    Esta autofactura ha sido generada automáticamente por EVenergia Consulting SL.
+</footer>
+
+</body>
+</html>

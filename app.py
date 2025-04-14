@@ -39,50 +39,61 @@ def generate():
         'margin-right': '15mm'
     }
 
+    # Agrupar por cliente (CIF) y fecha
+    grouped = facturas.groupby(['CIF', 'Fecha'])
+
     with ZipFile(zip_name, 'w') as zipf:
-        for _, row in facturas.iterrows():
-            cif = row["CIF"]
+        for (cif, fecha), group in grouped:
             if cif not in clientes.index:
                 continue
 
             cliente_info = clientes.loc[cif]
-            cliente_nombre = cliente_info["Cliente"]
+            proveedor_nombre = cliente_info["Cliente"]
             direccion = cliente_info["Dirección"]
             prefijo = cliente_info["Prefijo"]
             ultima = int(cliente_info["UltimaFactura"])
+            iban = cliente_info["IBAN"]
 
             nueva_numeracion = ultima + 1
             numero_factura = f"{prefijo}{nueva_numeracion:03d}"
 
-            html = template.render(
-                numero_factura=numero_factura,
-                proveedor_nombre=cliente_nombre,
-                proveedor_cif=cif,
-                proveedor_direccion=direccion,
-                fecha=str(row["Fecha"]),
-                items=[{
+            items = []
+            subtotal = 0
+            for _, row in group.iterrows():
+                importe = row["Importe"]
+                subtotal += importe
+                items.append({
                     'descripcion': row["Concepto"],
                     'unidades': 1,
-                    'precio_unitario': f"{row['Importe']:.2f}",
+                    'precio_unitario': f"{importe:.2f}",
                     'iva': "21",
-                    'total': f"{row['Importe'] * 1.21:.2f}"
-                }],
-                subtotal=f"{row['Importe']:.2f}",
-                total_iva=f"{row['Importe'] * 0.21:.2f}",
-                total=f"{row['Importe'] * 1.21:.2f}",
-                iban="ES00 1234 5678 9012 3456 7890",
+                    'total': f"{importe * 1.21:.2f}"
+                })
+
+            total_iva = subtotal * 0.21
+            total = subtotal * 1.21
+
+            html = template.render(
+                numero_factura=numero_factura,
+                proveedor_nombre=proveedor_nombre,
+                proveedor_cif=cif,
+                proveedor_direccion=direccion,
+                fecha=str(fecha),
+                items=items,
+                subtotal=f"{subtotal:.2f}",
+                total_iva=f"{total_iva:.2f}",
+                total=f"{total:.2f}",
+                iban=iban,
                 logo_path=logo_absoluto
             )
 
-            pdf_path = f"{cliente_nombre}_{numero_factura}.pdf".replace(" ", "_")
+            pdf_path = f"{proveedor_nombre}_{numero_factura}.pdf".replace(" ", "_")
             pdfkit.from_string(html, pdf_path, options=options)
             zipf.write(pdf_path)
             os.remove(pdf_path)
 
-            # Actualizar numeración en DataFrame
             clientes.at[cif, "UltimaFactura"] = nueva_numeracion
 
-    # Guardar Excel actualizado
     clientes.reset_index().to_excel(clientes_path, index=False)
     os.remove(facturas_path)
 

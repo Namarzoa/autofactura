@@ -12,19 +12,21 @@
         header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            margin-bottom: 20px;
         }
         .logo {
             width: 150px;
+            margin-top: 20px;
         }
         h1 {
             text-align: center;
             margin-top: 20px;
         }
-        .datos {
+        .seccion {
             margin-top: 30px;
         }
-        .datos div {
+        .seccion div {
             margin-bottom: 10px;
         }
         .tabla {
@@ -60,7 +62,8 @@
 <header>
     <img src="file://{{ logo_path }}" alt="Logo EVenergia" class="logo">
     <div>
-        <strong>EVenergia Consulting SL</strong><br>
+        <strong>Cliente:</strong><br>
+        EVenergia Consulting SL<br>
         CIF: B13803390<br>
         Avenida Diagonal, 532, P. 2<br>
         08006 Barcelona, España<br>
@@ -70,11 +73,12 @@
 
 <h1>Autofactura Nº {{ numero_factura }}</h1>
 
-<div class="datos">
-    <div><strong>Proveedor:</strong> {{ proveedor_nombre }}</div>
-    <div><strong>CIF:</strong> {{ proveedor_cif }}</div>
-    <div><strong>Dirección:</strong> {{ proveedor_direccion }}</div>
-    <div><strong>Fecha:</strong> {{ fecha }}</div>
+<div class="seccion">
+    <strong>Proveedor:</strong><br>
+    <div>{{ proveedor_nombre }}</div>
+    <div>CIF: {{ proveedor_cif }}</div>
+    <div>{{ proveedor_direccion }}</div>
+    <div>Fecha: {{ fecha }}</div>
 </div>
 
 <table class="tabla">

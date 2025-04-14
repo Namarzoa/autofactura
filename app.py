@@ -30,6 +30,15 @@ def generate():
     zip_name = "autofacturas.zip"
     numeracion = {}
 
+    options = {
+        'enable-local-file-access': '',
+        'encoding': 'UTF-8',
+        'margin-top': '20mm',
+        'margin-bottom': '20mm',
+        'margin-left': '15mm',
+        'margin-right': '15mm'
+    }
+
     with ZipFile(zip_name, 'w') as zipf:
         for _, row in merged.iterrows():
             cliente = row["Cliente"]
@@ -56,7 +65,7 @@ def generate():
             )
 
             pdf_path = f"{cliente}_{numero_factura}.pdf".replace(" ", "_")
-            pdfkit.from_string(html, pdf_path)
+            pdfkit.from_string(html, pdf_path, options=options)
             zipf.write(pdf_path)
             os.remove(pdf_path)
 

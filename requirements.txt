@@ -1,4 +1,5 @@
 Flask
 pandas
+jinja2
+pdfkit
 openpyxl
-reportlab

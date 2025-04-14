@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Autofacturas</title>
+</head>
+<body>
+    <h1>Generador de Autofacturas</h1>
+    <form action="/generate" method="post" enctype="multipart/form-data">
+        <label>Excel de Clientes: <input type="file" name="clientes" required></label><br><br>
+        <label>Excel de Autofacturas: <input type="file" name="facturas" required></label><br><br>
+        <button type="submit">Generar PDFs</button>
+    </form>
+</body>
+</html>

@@ -25,11 +25,10 @@ def generate():
     logo_absoluto = os.path.abspath("logo.png")
     clientes = pd.read_excel(clientes_path)
     facturas = pd.read_excel(facturas_path)
-    merged = facturas.merge(clientes, on="CIE", how="left")
 
+    clientes.set_index("CIF", inplace=True)
     template = env.get_template("plantilla.html")
     zip_name = "autofacturas.zip"
-    numeracion = {}
 
     options = {
         'enable-local-file-access': '',
@@ -41,16 +40,25 @@ def generate():
     }
 
     with ZipFile(zip_name, 'w') as zipf:
-        for _, row in merged.iterrows():
-            cliente = row["Cliente"]
-            numeracion[cliente] = numeracion.get(cliente, 0) + 1
-            numero_factura = f"{cliente[:2].upper()}{numeracion[cliente]:03d}"
+        for _, row in facturas.iterrows():
+            cif = row["CIF"]
+            if cif not in clientes.index:
+                continue
+
+            cliente_info = clientes.loc[cif]
+            cliente_nombre = cliente_info["Cliente"]
+            direccion = cliente_info["Dirección"]
+            prefijo = cliente_info["Prefijo"]
+            ultima = int(cliente_info["UltimaFactura"])
+
+            nueva_numeracion = ultima + 1
+            numero_factura = f"{prefijo}{nueva_numeracion:03d}"
 
             html = template.render(
                 numero_factura=numero_factura,
-                proveedor_nombre=cliente,
-                proveedor_cif=row["NIF"],
-                proveedor_direccion=row["Dirección"],
+                proveedor_nombre=cliente_nombre,
+                proveedor_cif=cif,
+                proveedor_direccion=direccion,
                 fecha=str(row["Fecha"]),
                 items=[{
                     'descripcion': row["Concepto"],
@@ -66,13 +74,18 @@ def generate():
                 logo_path=logo_absoluto
             )
 
-            pdf_path = f"{cliente}_{numero_factura}.pdf".replace(" ", "_")
+            pdf_path = f"{cliente_nombre}_{numero_factura}.pdf".replace(" ", "_")
             pdfkit.from_string(html, pdf_path, options=options)
             zipf.write(pdf_path)
             os.remove(pdf_path)
 
-    os.remove(clientes_path)
+            # Actualizar numeración en DataFrame
+            clientes.at[cif, "UltimaFactura"] = nueva_numeracion
+
+    # Guardar Excel actualizado
+    clientes.reset_index().to_excel(clientes_path, index=False)
     os.remove(facturas_path)
+
     return send_file(zip_name, as_attachment=True)
 
 if __name__ == "__main__":

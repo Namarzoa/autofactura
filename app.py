@@ -22,6 +22,7 @@ def generate():
     clientes_file.save(clientes_path)
     facturas_file.save(facturas_path)
 
+    logo_absoluto = os.path.abspath("logo.png")
     clientes = pd.read_excel(clientes_path)
     facturas = pd.read_excel(facturas_path)
     merged = facturas.merge(clientes, on="CIE", how="left")
@@ -61,7 +62,8 @@ def generate():
                 subtotal=f"{row['Importe']:.2f}",
                 total_iva=f"{row['Importe'] * 0.21:.2f}",
                 total=f"{row['Importe'] * 1.21:.2f}",
-                iban="ES00 1234 5678 9012 3456 7890"
+                iban="ES00 1234 5678 9012 3456 7890",
+                logo_path=logo_absoluto
             )
 
             pdf_path = f"{cliente}_{numero_factura}.pdf".replace(" ", "_")

@@ -27,7 +27,7 @@
             margin-top: 30px;
         }
         .seccion div {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         .tabla {
             width: 100%;
@@ -63,11 +63,11 @@
     <img src="file://{{ logo_path }}" alt="Logo EVenergia" class="logo">
     <div>
         <strong>Cliente:</strong><br>
-        EVenergia Consulting SL<br>
-        CIF: B13803390<br>
-        Avenida Diagonal, 532, P. 2<br>
-        08006 Barcelona, España<br>
-        info@evenergia.com
+        <div>EVenergia Consulting SL</div>
+        <div>B13803390</div>
+        <div>Avenida Diagonal, 532, P. 2</div>
+        <div>08006 Barcelona, España</div>
+        <div>info@evenergia.com</div>
     </div>
 </header>
 
@@ -76,9 +76,11 @@
 <div class="seccion">
     <strong>Proveedor:</strong><br>
     <div>{{ proveedor_nombre }}</div>
-    <div>CIF: {{ proveedor_cif }}</div>
+    <div>{{ proveedor_cif }}</div>
     <div>{{ proveedor_direccion }}</div>
+    <div>{{ proveedor_direccion2 }}</div>
     <div>Fecha: {{ fecha }}</div>
+    <div>Fecha de vencimiento: {{ fecha_vencimiento }}</div>
 </div>
 
 <table class="tabla">

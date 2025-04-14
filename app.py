@@ -55,7 +55,7 @@ def generate():
             iban = cliente_info["IBAN"]
 
             nueva_numeracion = ultima + 1
-            numero_factura = f"{prefijo}{nueva_numeracion:03d}"
+            numero_factura = f"{prefijo}{nueva_numeracion:04d}"
 
             items = []
             subtotal = 0

@@ -6,28 +6,32 @@
     <style>
         html, body {
             height: 100%;
-            margin: 20px 40px 40px 40px;
+            margin: 0;
+            padding: 40px 40px 60px 40px;
             font-family: Arial, sans-serif;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            margin-bottom: 20px;
         }
         .logo {
             width: 150px;
-            margin-top: 10px;
         }
         h1 {
             text-align: center;
-            margin: 20px 0 10px 0;
+            margin: 10px 0 20px 0;
         }
         .seccion, .proveedor, .cliente {
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .cliente {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .proveedor div, .cliente div {
             margin-bottom: 1px;
@@ -35,16 +39,16 @@
         }
         .fechas {
             text-align: right;
-            margin-top: -10px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .tabla {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         .tabla th, .tabla td {
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 8px;
             text-align: left;
         }
         .totales {
@@ -55,70 +59,71 @@
         .totales div {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         footer {
-            margin-top: 60px;
+            margin-top: 40px;
             text-align: center;
             font-size: 12px;
             color: #777;
-            clear: both;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <img src="file://{{ logo_path }}" alt="Logo EVenergia" class="logo">
-    <div class="proveedor">
-        <strong>Proveedor:</strong><br>
-        <div>{{ proveedor_nombre }}</div>
-        <div>{{ proveedor_cif }}</div>
-        <div>{{ proveedor_direccion }}</div>
-        <div>{{ proveedor_direccion2 }}</div>
-        <div>{{ proveedor_email }}</div>
+<div>
+    <header>
+        <img src="file://{{ logo_path }}" alt="Logo EVenergia" class="logo">
+        <div class="proveedor">
+            <strong>Proveedor:</strong><br>
+            <div>{{ proveedor_nombre }}</div>
+            <div>{{ proveedor_cif }}</div>
+            <div>{{ proveedor_direccion }}</div>
+            <div>{{ proveedor_direccion2 }}</div>
+            <div>{{ proveedor_email }}</div>
+        </div>
+    </header>
+
+    <h1>Autofactura Nº {{ numero_factura }}</h1>
+
+    <div class="seccion cliente">
+        <strong>Cliente:</strong><br>
+        <div>EVenergia Consulting SL</div>
+        <div>B13803390</div>
+        <div>Avenida Diagonal, 532, P. 2</div>
+        <div>08006 Barcelona, España</div>
+        <div>info@evenergia.com</div>
     </div>
-</header>
 
-<h1>Autofactura Nº {{ numero_factura }}</h1>
+    <div class="fechas">
+        <div>Fecha: {{ fecha }}</div>
+        <div>Fecha de vencimiento: {{ fecha_vencimiento }}</div>
+    </div>
 
-<div class="seccion cliente">
-    <strong>Cliente:</strong><br>
-    <div>EVenergia Consulting SL</div>
-    <div>B13803390</div>
-    <div>Avenida Diagonal, 532, P. 2</div>
-    <div>08006 Barcelona, España</div>
-    <div>info@evenergia.com</div>
-</div>
+    <table class="tabla">
+        <tr>
+            <th>Descripción</th>
+            <th>Unidades</th>
+            <th>Precio Unitario</th>
+            <th>IVA (%)</th>
+            <th>Total</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.descripcion }}</td>
+            <td>{{ item.unidades }}</td>
+            <td>{{ item.precio_unitario }}</td>
+            <td>{{ item.iva }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
-<div class="fechas">
-    <div>Fecha: {{ fecha }}</div>
-    <div>Fecha de vencimiento: {{ fecha_vencimiento }}</div>
-</div>
-
-<table class="tabla">
-    <tr>
-        <th>Descripción</th>
-        <th>Unidades</th>
-        <th>Precio Unitario</th>
-        <th>IVA (%)</th>
-        <th>Total</th>
-    </tr>
-    {% for item in items %}
-    <tr>
-        <td>{{ item.descripcion }}</td>
-        <td>{{ item.unidades }}</td>
-        <td>{{ item.precio_unitario }}</td>
-        <td>{{ item.iva }}</td>
-        <td>{{ item.total }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
-<div class="totales">
-    <div><strong>Subtotal:</strong> {{ subtotal }} €</div>
-    <div><strong>IVA:</strong> {{ total_iva }} €</div>
-    <div><strong>Total:</strong> {{ total }} €</div>
+    <div class="totales">
+        <div><strong>Subtotal:</strong> {{ subtotal }} €</div>
+        <div><strong>IVA:</strong> {{ total_iva }} €</div>
+        <div><strong>Total:</strong> {{ total }} €</div>
+    </div>
 </div>
 
 <footer>

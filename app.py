@@ -39,7 +39,6 @@ def generate():
         'margin-right': '15mm'
     }
 
-    # Agrupar por cliente (CIF), fecha y vencimiento
     grouped = facturas.groupby(['CIF', 'Fecha', 'FechaVencimiento'])
 
     with ZipFile(zip_name, 'w') as zipf:
@@ -51,6 +50,7 @@ def generate():
             proveedor_nombre = cliente_info["Cliente"]
             direccion = cliente_info["Dirección"]
             direccion2 = cliente_info.get("Dirección 2", "")
+            proveedor_email = cliente_info.get("Email", "")
             prefijo = cliente_info["Prefijo"]
             ultima = int(cliente_info["UltimaFactura"])
             iban = cliente_info["IBAN"]
@@ -80,6 +80,7 @@ def generate():
                 proveedor_cif=cif,
                 proveedor_direccion=direccion,
                 proveedor_direccion2=direccion2,
+                proveedor_email=proveedor_email,
                 fecha=str(fecha),
                 fecha_vencimiento=str(fecha_vencimiento),
                 items=items,

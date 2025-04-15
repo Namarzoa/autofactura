@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <title>Autofactura</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        html, body {
+            height: 100%;
             margin: 40px;
+            font-family: Arial, sans-serif;
             color: #333;
+            position: relative;
         }
         header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 20px;
         }
         .logo {
             width: 150px;
@@ -21,18 +22,26 @@
         }
         h1 {
             text-align: center;
-            margin-top: 20px;
+            margin: 30px 0 20px 0;
         }
-        .seccion {
+        .seccion, .proveedor, .cliente {
             margin-top: 30px;
         }
-        .seccion div {
-            margin-bottom: 5px;
+        .cliente {
+            margin-bottom: 60px;
+        }
+        .proveedor div, .cliente div {
+            margin-bottom: 1px;
+            line-height: 1.1;
+        }
+        .fechas {
+            text-align: right;
+            margin-top: -20px;
+            margin-bottom: 40px;
         }
         .tabla {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 30px;
         }
         .tabla th, .tabla td {
             border: 1px solid #ccc;
@@ -50,7 +59,10 @@
             margin-bottom: 5px;
         }
         footer {
-            margin-top: 100px;
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
             text-align: center;
             font-size: 12px;
             color: #777;
@@ -61,24 +73,28 @@
 
 <header>
     <img src="file://{{ logo_path }}" alt="Logo EVenergia" class="logo">
-    <div>
-        <strong>Cliente:</strong><br>
-        <div>EVenergia Consulting SL</div>
-        <div>B13803390</div>
-        <div>Avenida Diagonal, 532, P. 2</div>
-        <div>08006 Barcelona, España</div>
-        <div>info@evenergia.com</div>
+    <div class="proveedor">
+        <strong>Proveedor:</strong><br>
+        <div>{{ proveedor_nombre }}</div>
+        <div>{{ proveedor_cif }}</div>
+        <div>{{ proveedor_direccion }}</div>
+        <div>{{ proveedor_direccion2 }}</div>
+        <div>{{ proveedor_email }}</div>
     </div>
 </header>
 
 <h1>Autofactura Nº {{ numero_factura }}</h1>
 
-<div class="seccion">
-    <strong>Proveedor:</strong><br>
-    <div>{{ proveedor_nombre }}</div>
-    <div>{{ proveedor_cif }}</div>
-    <div>{{ proveedor_direccion }}</div>
-    <div>{{ proveedor_direccion2 }}</div>
+<div class="seccion cliente">
+    <strong>Cliente:</strong><br>
+    <div>EVenergia Consulting SL</div>
+    <div>B13803390</div>
+    <div>Avenida Diagonal, 532, P. 2</div>
+    <div>08006 Barcelona, España</div>
+    <div>info@evenergia.com</div>
+</div>
+
+<div class="fechas">
     <div>Fecha: {{ fecha }}</div>
     <div>Fecha de vencimiento: {{ fecha_vencimiento }}</div>
 </div>
